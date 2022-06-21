@@ -9,12 +9,11 @@ from starlette.status import HTTP_429_TOO_MANY_REQUESTS
 
 
 async def default_identifier(request: Request):
-    forwarded = request.headers.get("X-Forwarded-For")
-    if forwarded:
+    if forwarded := request.headers.get("X-Forwarded-For"):
         ip = forwarded.split(",")[0]
     else:
         ip = request.client.host
-    return ip + ":" + request.scope["path"]
+    return f"{ip}:" + request.scope["path"]
 
 
 async def default_callback(request: Request, response: Response, pexpire: int):
